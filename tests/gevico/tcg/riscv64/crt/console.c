@@ -295,14 +295,16 @@ static int my_vsnprintf(char *out, size_t n, const char *s, va_list vl)
                     out[printlen[HARTID] - 1] = 'x';
                 }
             case 'x':
+            case 'X':
             {
                 long num = longarg ? va_arg(vl, long) : va_arg(vl, int);
+                bool uppercase = (*s == 'X');
                 for (int i = 2 * (longarg ? sizeof(long) : sizeof(int)) - 1;
                      i >= 0; i--) {
                     int d = (num >> (4 * i)) & 0xF;
                     if (++printlen[HARTID] < n) {
                         out[printlen[HARTID] - 1] = (d < base ? '0' + d :
-                                             'a' + d - base);
+                                             (uppercase ? 'A' : 'a') + d - base);
                     }
                 }
                 longarg = false;
